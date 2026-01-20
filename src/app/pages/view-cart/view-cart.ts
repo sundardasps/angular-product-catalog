@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ListCartItems } from './list-cart-items/list-cart-items';
 import { BackButton } from '../../components/back-button/back-button';
 import { TeaseWishlist } from './tease-wishlist/tease-wishlist';
 import { SummarizeOrder } from '../../components/summarize-order/summarize-order';
+import { MatButton } from '@angular/material/button';
+import { EcommerceStore } from '../../ecommerce.store';
 
 @Component({
   selector: 'app-view-cart',
-  imports: [ListCartItems, BackButton, TeaseWishlist, SummarizeOrder],
+  imports: [ListCartItems, BackButton, TeaseWishlist, SummarizeOrder, MatButton],
   template: `
     <div class="mx-auto max-w-[1200px] py-6 px-4 ">
       <app-back-button navigateTo="/products/all"> Continue shoping </app-back-button>
@@ -19,11 +21,23 @@ import { SummarizeOrder } from '../../components/summarize-order/summarize-order
           <app-list-cart-items />
         </div>
         <div>
-          <app-summarize-order />
+          <app-summarize-order>
+            <ng-container actionButtons>
+              <button
+                matButton="filled"
+                class="w-full mt-6 py-3"
+                (click)="store.proceedToCheckout()"
+              >
+                Proceed to Checkout
+              </button>
+            </ng-container>
+          </app-summarize-order>
         </div>
       </div>
     </div>
   `,
   styles: ``,
 })
-export default class ViewCart {}
+export default class ViewCart {
+  store = inject(EcommerceStore);
+}
